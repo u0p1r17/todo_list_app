@@ -1,0 +1,105 @@
+.calendar {
+    padding: 0 1rem;
+    overflow-x:hidden;
+}
+.months {
+    position: relative;
+
+    /* height: 50vh; */
+    /* box-sizing: content-box; */
+    /* border: 1px solid red; */
+    /* overflow: hidden; */
+    /* -webkit-overflow-scrolling: touch; */
+}
+.box-scroll{
+
+    /* -webkit-overflow-scrolling: touch; */
+    overflow-x:hidden;
+    height: 37.1rem;
+}
+.month{
+    /* scroll-behavior: smooth; */
+    /* padding: 2em 0; */
+    border: 2px solid red;
+
+}
+
+
+/* .month:nth-child(3){
+    scroll-snap-align: 'center';
+} */
+
+
+
+.month:last-child{
+
+}
+.fullday {
+
+    /* background-color: red; */
+}
+.numberday {
+    /* background-color: blue; */
+}
+/* .hiddeBoxTop{
+    position: absolute;
+    padding: 0 0.5em ;
+    top: 0;
+    background-color: black;
+    width: 100%;
+    height: 10em;
+
+    background:
+        linear-gradient( to top, rgba(99, 94, 94, 0),rgb(99, 94, 94));
+    ;
+} */
+/* .hiddeBoxBottom{
+    position: absolute;
+    padding: 0 0.5em ;
+    bottom: 0;
+    background-color: black;
+    width: 100%;
+    height: 10em;
+
+    background:
+        linear-gradient( to bottom, rgba(99, 94, 94,0),rgb(99, 94, 94));
+
+    ;
+} */
+
+.row {
+    display: grid;
+    padding: 0;
+    grid-template-columns: repeat(7,1fr);
+    background-color: white;
+    margin: 0;
+}
+
+.row li:nth-child(6),.row li:nth-child(7){
+    background-color: rgba(0, 0, 0, 0.175);
+}
+
+.today {
+    color: red;
+}
+.row {
+    width: 100%;
+}
+.row > li {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    width: 100%;
+    height: 2.5em;
+    margin: 0;
+    padding: 0;
+    border-right: 1px solid rgb(22, 98, 22);;
+    border-bottom: 1px solid green;
+}
+
+.row > li > p {
+    margin: 0;
+    padding: 0;
+    padding: 0.2em;
+}
+
