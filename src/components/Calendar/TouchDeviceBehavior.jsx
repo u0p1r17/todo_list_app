@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { MounthItem } from "./MounthItem"
 import { v1 as uuidV1 } from "uuid"
+import { entries } from "lodash"
 
 const ulStyle = {
-
     height: '45vh',
     overflow: 'scroll',
     overflowX: 'hidden',
@@ -13,92 +13,94 @@ const ulStyle = {
     listStyle: 'none',
 }
 
-const initTable = (today) => {
-    let cache = []
-        for (let i = -1; i <= 1; i++) {
-            cache = [
-                ...cache,
-                {
-                    key: uuidV1(),
-                    date: new Date(today.getFullYear(), today.getMonth() + (i))
-                }
-            ]
-        }
-        return cache
-}
-
-export const TouchDeviceBehavior = () => {
+export const TouchDeviceBehavior = ({ dateTableInit }) => {
     const containerRef = useRef(null)
-    const [today, setToday] = useState(new Date())
-    const [table, setTable] = useState([...initTable(today)])
-    const [direction, setDirection] = useState('')
+    const [table, setTable] = useState(dateTableInit)
+    const [start, setStart] = useState(true)
 
-    // useEffect(() => {
-    //     const element = containerRef.current.children[1]
-    //     if (element) {
-    //         element.scrollIntoView({
-    //             behavior: 'smooth',
-    //             inline: 'center'
-    //         })
-    //     }
-    //     return () => {
-    //         setDirection('')
-    //     }
-    // }, [table])
-     useEffect(() => {
+
+    // const top = (array) => {
+    //     array.pop()
+    //     array = [
+    //         {
+    //             key: uuidV1(),
+    //             date: new Date(array[0].date.getFullYear(), array[0].date.getMonth() - 1)
+    //         },
+    //         ...array,
+    //     ]
+    //     return array
+    // }
+    // const bottom = (array) => {
+    //     array.shift()
+    //     array = [
+    //         ...array,
+    //         {
+    //             key: uuidV1(),
+    //             date: new Date(array[1].date.getFullYear(), array[1].date.getMonth() + 1)
+    //         },
+    //     ]
+    //     return array
+    // }
+
+    const observer = new IntersectionObserver((entries, observer) => {
+        const cache = [...table]
         const element = containerRef.current.children[1]
-        if (element) {
-            element.scrollIntoView({
-                block: 'start'
-            })
+        entries.forEach((entry, i) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    if (entry.isIntersecting) {
+                        if (entry.target.id === '0') {
+                            cache.pop()
+                            setTable([
+                                {
+                                    key: uuidV1(),
+                                    date: new Date(cache[0].date.getFullYear(), cache[0].date.getMonth() - 1)
+                                },
+                                ...cache,
+                            ])
+                            observer.disconnect()
+                        } else if (entry.target.id === '2') {
+                            cache.shift()
+                            setTable([
+                                ...cache,
+                                {
+                                    key: uuidV1(),
+                                    date: new Date(cache[1].date.getFullYear(), cache[1].date.getMonth() + 1)
+                                },
+                            ])
+                            observer.disconnect()
+                        }
+                        if (element) {
+                            element.scrollIntoView()
+                        }
+                    }
+                }, 500);
+            }
+        })
+        
+    }, {
+        threshold: 0.97
+    })
+
+    useLayoutEffect(() => {
+        const element = containerRef.current.children[1]
+        
+        if (start) {
+            element.scrollIntoView()
+            setStart(false)
         }
-        return () => {
-            setDirection('')
-        }
+        
+        observer.observe(containerRef.current.children[0])
+        observer.observe(containerRef.current.children[2])
     }, [table])
 
-    const handleDirection = (string) => {
-        const direction = string
-        console.log(string)
-        setDirection(direction)
-    }
-
-    const handleTouchEnd = () => {
-        const inMiddle = table[1].number
-        let cache = [...table]
-        console.log(direction)
-        if (direction === 'top') {
-            cache.pop()
-            setTable([
-                {
-                    key: uuidV1(),
-                    date: new Date(table[0].date.getFullYear(), table[0].date.getMonth() - 2)
-                },
-                ...cache,
-            ])
-            
-
-        } else if (direction === 'bottom') {
-            cache.shift()
-            setTable([
-                ...cache,
-                {
-                    key: uuidV1(),
-                    date: new Date(table[0].date.getFullYear(), table[0].date.getMonth() + 2)
-                },
-            ])
-        }
-    }
-
-
-
-
-    const displayList = table && table.map((el, i) => {
-        return <MounthItem key={i} id={i} date={el.date} fireDirection={handleDirection} />
+    const displayList = table.map((el, i) => {
+        return <MounthItem key={el.key} id={i} date={el.date} />
+        // return <MounthItem key={el.key} id={i} date={el.date} fireDirection={handleFireDirection} />
     })
 
     return (
-        <div ref={containerRef} style={ulStyle} onTouchEnd={handleTouchEnd}>
+        <div ref={containerRef} style={ulStyle} >
             {
                 displayList
             }
