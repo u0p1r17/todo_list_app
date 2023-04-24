@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react"
+import { useLayoutEffect, useRef, useState } from "react"
 import { MounthItem } from "./MounthItem"
 import { v1 as uuidV1 } from "uuid"
 
@@ -12,7 +12,7 @@ const ulStyle = {
     listStyle: 'none',
 }
 
-export const DeskDeviceBehavior = ({ dateTableInit }) => {
+export const DisplayMonthly = ({ dateTableInit }) => {
     const containerRef = useRef(null)
     const [table, setTable] = useState(dateTableInit)
     const [start, setStart] = useState(true)
@@ -48,7 +48,7 @@ export const DeskDeviceBehavior = ({ dateTableInit }) => {
                         element.scrollIntoView()
                     }
                 }
-            }, 300);
+            }, 400);
         })
         
     }, {
@@ -80,68 +80,3 @@ export const DeskDeviceBehavior = ({ dateTableInit }) => {
     )
 
 }
-
-
-// const timeout = setTimeout(() => {
-//     let cache = [...table]
-//     if (direction === 'top') {
-//         cache.pop()
-//         setTable([
-//             {
-//                 key: uuidV1(),
-//                 date: new Date(cache[0].date.getFullYear(), cache[0].date.getMonth() - 1)
-//             },
-//             ...cache,
-//         ])
-        
-//     } else if (direction === 'bottom') {
-//         cache.shift()
-//         setTable([
-//             ...cache,
-//             {
-//                 key: uuidV1(),
-//                 date: new Date(cache[1].date.getFullYear(), cache[1].date.getMonth() + 1)
-//             },
-//         ])
-//     }
-
-// }, 500);
- // console.log(initTable(today))
-    // useEffect(() => {
-    //     const element = containerRef.current.children[1]
-    //     if (element) {
-    //         element.scrollIntoView({
-    //             block: 'start'
-    //         })
-    //     }
-    // }, [table])
-
-    // const handleDirection = (string) => {
-    //     const inMiddle = table[1].number
-    //     const direction = string
-    //     const timeout = setTimeout(() => {
-    //         let cache = [...table]
-    //         if (direction === 'top') {
-    //             cache.pop()
-    //             setTable([
-    //                 {
-    //                     key: uuidV1(),
-    //                     date: new Date(cache[0].date.getFullYear(), cache[0].date.getMonth() - 1)
-    //                 },
-    //                 ...cache,
-    //             ])
-                
-    //         } else if (direction === 'bottom') {
-    //             cache.shift()
-    //             setTable([
-    //                 ...cache,
-    //                 {
-    //                     key: uuidV1(),
-    //                     date: new Date(cache[1].date.getFullYear(), cache[1].date.getMonth() + 1)
-    //                 },
-    //             ])
-    //         }
-
-    //     }, 500);
-
-    // }

@@ -1,32 +1,12 @@
-
-// // import { useEffect } from "react"
-// import { MonthLayout } from "../components/Calendar/MonthLayout"
-// import { Agenda } from "../components/Calendar/Agenda"
-
-// import '../css/calendar.css'
-// // import '../css/agenda.css'
-// import '../css/infiniteCalendar.css'
-import { isBrowser, isDesktop, isMobile } from "react-device-detect"
-import { DeskDeviceBehavior } from "../components/Calendar/DeskDeviceBehavior"
-import { TouchDeviceBehavior } from "../components/Calendar/TouchDeviceBehavior"
+import { FilterDisplay } from "../components/Calendar/FilterDisplay"
+import { DisplayMonthly } from "../components/Calendar/Month/DisplayMonthly"
+import { DisplayWeekly } from "../components/Calendar/Week/DisplayWeekly"
 import { useState } from "react"
 import { v1 as uuidV1 } from "uuid"
 
-
-// export const Cal = () => {
-//     return (
-//         <div className="container">
-//             <h1>Calendrier des taches {isBrowser ? 'Browser' : isMobile ? 'Mobile' : null} </h1>
-//             <div className="calendar" >
-
-//                 <MonthLayout device={isBrowser ? 'browser' : isMobile ? 'mobile' : null} />
-
-//             </div>
-//         </div>
-//     )
-// }
 export const Cal = () => {
-    const [today, setToday] = useState(new Date())
+    const [today] = useState(new Date())
+    const [filter, setFilter] = useState(3)
     const initTable = (today) => {
         let cache = []
         for (let i = -1; i <= 1; i++) {
@@ -40,21 +20,32 @@ export const Cal = () => {
         }
         return cache
     }
-    console.log(initTable(today))
+
+    const handleFilter = (number) => {
+        setFilter(number)
+    }
+    switch (filter) {
+        case 1:
+            console.log("1")
+            break;
+    
+        case 2:
+            console.log("2")
+            break;
+    
+        case 3:
+            console.log("3")
+            break;
+    
+        default:
+            break;
+    }
     return (
         <>
             <h1>Desktop</h1>
-            <DeskDeviceBehavior dateTableInit={initTable(today)} />
+            <DisplayWeekly />
+            <DisplayMonthly dateTableInit={initTable(today)} />
+            <FilterDisplay onFilter={handleFilter} />
         </>
     )
-    if (isDesktop) {
-    } 
-    else {
-        return (
-            <>
-                <h1>Mobile</h1>
-                <TouchDeviceBehavior dateTableInit={initTable(today)} />
-            </>
-        )
-    }
 }
